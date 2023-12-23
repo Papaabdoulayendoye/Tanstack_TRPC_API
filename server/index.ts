@@ -8,7 +8,8 @@ const app = express()
 app.use(cors({origin : 'http://localhost:5173'}))
 
 app.use('/trpc', createExpressMiddleware({
-    router : AppRouter
+    router : AppRouter,
+    createContext : () => ({}),
 }))
 
 app.listen(3000, () => {

@@ -1,4 +1,4 @@
-import {publicProcedure, t} from '../trpc'
+import {PrivateProcedure, publicProcedure, t} from '../trpc'
 import z from 'zod'
 export const AppRouter = t.router({
     Hello : publicProcedure.query(() => {
@@ -8,7 +8,11 @@ export const AppRouter = t.router({
         .input(z.object({name : z.string(), password : z.string().min(4,"must contain more than 4 caractere!")}))
         .mutation(({input}) => {
             return input
-        })
+        }),
+    getAdmin : PrivateProcedure.query(({ctx}) => {
+        const {user} = ctx
+        return user
+    })
 })
 
 

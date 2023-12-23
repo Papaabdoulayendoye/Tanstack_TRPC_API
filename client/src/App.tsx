@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
 import { trpc } from "../api/utils";
 function App() {
   // const {data,isLoading} = trpc.Hello.useQuery()
   // console.log("data",data);
-  const {data : currentUser,isLoading,mutate} = trpc.getUser.useMutation(
+  const {data : currentUser,mutate} = trpc.getUser.useMutation(
     {
     onSuccess () {
       console.log("Success");
@@ -13,14 +12,18 @@ function App() {
     },
     onMutate(){
       console.log("Mutated successfuly");
+    },
+    onSettled() {
+      console.log("SETTLED BRO");
     }
   })
 
   // useEffect(() => {
     // mutate({name : 'Abdoulaye',password : '12236'})
   // },[])
+  const Admin = trpc.getAdmin.useQuery()
   
-  if (isLoading) {
+  if (Admin.isLoading) {
     return (
         <h1>Loading...</h1>
     )
@@ -28,15 +31,15 @@ function App() {
   const submit = (e : any) => {
     e.preventDefault()
     if (e.target.username !== '') {
-      mutate({name : e.target.username ,password : '12345'})
+      mutate({name : e.target.username.value ,password : '12345'})
     } 
   }
-
   return (
     <div>
       <h1>Let's learn more about TRPC</h1>
+      <h1>Admin Page is : {Admin.data}</h1>
       <div>
-        <form onSubmit={submit}>
+        <form onSubmit={submit} method='POST'>
           <input type="text" required placeholder='Enter your uesr name' name='username' />
           <button type="submit">Add User</button>
         </form>
