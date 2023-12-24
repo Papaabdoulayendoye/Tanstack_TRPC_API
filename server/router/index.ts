@@ -12,7 +12,16 @@ export const AppRouter = t.router({
     getAdmin : PrivateProcedure.query(({ctx}) => {
         const {user} = ctx
         return user
-    })
+    }),
+    Update : publicProcedure
+        .input(z.object({newCtx : z.string()}))
+        .mutation((opts) => {
+        const {input} = opts
+        console.log("input.newCtx");
+        console.log(input.newCtx);
+        
+        return input
+    }),
 })
 
 

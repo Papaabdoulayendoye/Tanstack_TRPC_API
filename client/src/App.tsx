@@ -1,21 +1,32 @@
+import { useEffect, useState } from 'react';
 import { trpc } from "../api/utils";
 function App() {
+  
+  console.log("INPUT");
+  const {data:panda,mutate:mutant} = trpc.Update.useMutation({
+    onSuccess(){
+      console.log("MUTANT");
+    }
+  })
+  
+  
+  
   // const {data,isLoading} = trpc.Hello.useQuery()
   // console.log("data",data);
   const {data : currentUser,mutate} = trpc.getUser.useMutation(
     {
-    onSuccess () {
-      console.log("Success");
-    },
-    onError () {
-      console.log("Error");
-    },
-    onMutate(){
-      console.log("Mutated successfuly");
-    },
-    onSettled() {
-      console.log("SETTLED BRO");
-    }
+    // onSuccess () {
+    //   console.log("Success");
+    // },
+    // onError () {
+    //   console.log("Error");
+    // },
+    // onMutate(){
+    //   console.log("Mutated successfuly");
+    // },
+    // onSettled() {
+    //   console.log("SETTLED BRO");
+    // }
   })
 
   // useEffect(() => {
@@ -32,6 +43,7 @@ function App() {
     e.preventDefault()
     if (e.target.username !== '') {
       mutate({name : e.target.username.value ,password : '12345'})
+      mutant({newCtx : 'PAN_MUTANT'})
     } 
   }
   return (
@@ -45,7 +57,7 @@ function App() {
         </form>
       </div>
       {currentUser ? (
-        <h1>New User is : {currentUser?.name}</h1>
+        <h1>New User is : {currentUser?.name} {panda?.newCtx}</h1>
       ): (
         <h3>no user again...</h3>
       )}
